@@ -1,0 +1,19 @@
+.App {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Global transitions between views */
+.App>* {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
