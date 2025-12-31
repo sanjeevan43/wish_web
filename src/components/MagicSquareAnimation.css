@@ -251,6 +251,59 @@ canvas {
     border-color: #20bd5a;
 }
 
+.cinematic-border {
+    padding: 8px;
+    background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
+    background-size: 400% 400%;
+    animation: rainbow-border 8s ease infinite;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes rainbow-border {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+.glow-on-hover {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(45deg, var(--primary), var(--secondary), #ff0080, #7928ca);
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #FF3D00, #FFEA00, #00E676, #00B0FF, #D500F9);
+    background-size: 400% 400%;
+    animation: gradient-shift 5s ease infinite;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
 .fast-share {
     background: rgba(255, 255, 100, 0.03);
     padding: var(--spacing-md);

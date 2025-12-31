@@ -129,17 +129,25 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                             const x = startX + ci * cellSize + cellSize / 2;
                             const y = startY + ri * cellSize + cellSize / 2;
 
-                            ctx.fillStyle = (ri === 0) ? highlightColor : '#fff';
+                            // Rainbow Shimmer for special effect
+                            const hueShift = (progress * 360 + ri * 20 + ci * 20) % 360;
+                            const isDateRow = (ri === 0);
+
+                            ctx.fillStyle = isDateRow ? `hsl(${hueShift}, 100%, 70%)` : '#fff';
                             // Dynamic dimming
-                            if (isCompletedRow && ri !== 0) ctx.fillStyle = 'rgba(255,255,255,0.6)';
-                            if (isCompletedRow && ri === 0) ctx.fillStyle = highlightColor;
+                            if (isCompletedRow && ri !== 0) ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                            if (isCompletedRow && ri === 0) ctx.fillStyle = `hsl(${hueShift}, 100%, 75%)`;
 
                             // Fade out
                             ctx.globalAlpha = rowOpacity * cellP;
 
                             ctx.font = (ri === 0)
-                                ? `bold ${cellSize * 0.4}px 'Poppins', sans-serif`
-                                : `${cellSize * 0.35}px 'Poppins', sans-serif`;
+                                ? `bold ${cellSize * 0.42}px 'Poppins', sans-serif`
+                                : `${cellSize * 0.38}px 'Poppins', sans-serif`;
+
+                            // Text Glow
+                            ctx.shadowColor = isDateRow ? `hsl(${hueShift}, 100%, 50%)` : highlightColor;
+                            ctx.shadowBlur = 10 * cellP;
 
                             // Pop effect
                             if (cellP < 1 && isCurrentRow) {
@@ -290,18 +298,20 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
 
     }, [square, magicConstant, startX, startY, cellSize, gridSize, drawGrid, highlightColor, bgColor, wishData, mousePos]);
 
-    // Helper to trigger firework burst
-    const triggerCracker = (ref, x, y, color) => {
-        for (let i = 0; i < 30; i++) {
+    // Helper to trigger multi-colored firework burst
+    const triggerCracker = (ref, x, y, baseColor) => {
+        const particleCount = 45; // More dense
+        for (let i = 0; i < particleCount; i++) {
             const angle = Math.random() * Math.PI * 2;
-            const velocity = 2 + Math.random() * 8;
+            const velocity = 3 + Math.random() * 10;
+            const hue = Math.random() * 360; // Every particle a new color
             ref.current.push({
                 x, y,
                 vx: Math.cos(angle) * velocity,
                 vy: Math.sin(angle) * velocity,
-                life: 1.0,
-                r: Math.random() * 3 + 1,
-                color: color
+                life: 1.0 + Math.random() * 0.5, // Varied life
+                r: Math.random() * 4 + 1.5,
+                color: `hsl(${hue}, 100%, 65%)`
             });
         }
     };

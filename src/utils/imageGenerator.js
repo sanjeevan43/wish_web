@@ -141,9 +141,12 @@ function generateBirthdayImage(ctx, size, rng, highlight, bg) {
         ctx.restore();
     }
 
-    // Sparkles
-    addSparkles(ctx, size, rng, 80, '#fff');
-    addSparkles(ctx, size, rng, 40, '#ffd700');
+    // Multi-color Sparkles
+    addSparkles(ctx, size, rng, 100, '#fff');
+    addSparkles(ctx, size, rng, 60, highlight);
+    for (let i = 0; i < 30; i++) {
+        addSparkles(ctx, size, rng, 1, `hsl(${rng() * 360}, 100%, 75%)`);
+    }
 }
 
 /**
@@ -191,9 +194,12 @@ function generateAnniversaryImage(ctx, size, rng, highlight, bg) {
         ctx.restore();
     }
 
-    // Golden sparkles
+    // Golden & Multi Sparkles
     addSparkles(ctx, size, rng, 60, '#ffd700');
     addSparkles(ctx, size, rng, 40, '#fff');
+    for (let i = 0; i < 20; i++) {
+        addSparkles(ctx, size, rng, 1, `hsla(${rng() * 360}, 100%, 70%, 0.8)`);
+    }
 }
 
 /**
@@ -242,7 +248,11 @@ function generateNewYearImage(ctx, size, rng, highlight, bg) {
         ctx.fillRect(0, 0, size, size);
     }
 
+    // Multi-color Celebration Sparles
     addSparkles(ctx, size, rng, 100, '#ffd700');
+    for (let i = 0; i < 50; i++) {
+        addSparkles(ctx, size, rng, 1, `hsl(${rng() * 360}, 100%, 70%)`);
+    }
 }
 
 /**
@@ -424,8 +434,12 @@ function generateMagicalImage(ctx, size, rng, highlight, bg) {
         ctx.fill();
     }
 
+    // Magic multi-color shimmer
     addSparkles(ctx, size, rng, 80, '#fff');
     addSparkles(ctx, size, rng, 40, '#ff69b4');
+    for (let i = 0; i < 50; i++) {
+        addSparkles(ctx, size, rng, 1, `hsla(${rng() * 360}, 100%, 75%, 0.9)`);
+    }
 }
 
 // === HELPER DRAWING FUNCTIONS ===
