@@ -36,7 +36,7 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const highlightColor = wishData.colorHighlight || '#ff6b6b';
     const bgColor = wishData.colorBg || '#0a0a0f';
 
-    // Total duration: 10 seconds at 60fps (Cinematic pace)
+    // Total duration: ~10 seconds on screen (at 60fps), much longer in GIF
     const totalFrames = 600;
 
     const imgRef = useRef(new Image());
@@ -63,22 +63,22 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
 
     const renderFrame = useCallback((ctx, frame, total) => {
         const progress = frame / total;
-        // Cinematic Timeline:
-        // 0.00 - 0.40: Magic Square Reveal (Faster, punchier)
-        // 0.40 - 0.60: Proof (Quick visual validation)
-        // 0.60 - 1.00: Heartful Image & Personalized Message (40% duration!)
+        // Serene Cinematic Timeline:
+        // 0.00 - 0.50: Magic Square Reveal (Slower, meditative reveal)
+        // 0.50 - 0.70: Proof (Clear, easy to follow validation)
+        // 0.70 - 1.00: Heartful Image & Personalized Message (Long, emotional hold)
 
         // Clear & Background
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, size, size);
 
-        // --- STAGE 1: MAGIC SQUARE REVEAL (0.0 - 0.45) ---
-        if (progress < 0.6) {
-            const squareP = Math.min(1, progress / 0.4);
-            drawGrid(ctx, 1 - Math.max(0, (progress - 0.55) * 10)); // Fade grid out earlier
+        // --- STAGE 1: MAGIC SQUARE REVEAL (0.0 - 0.55) ---
+        if (progress < 0.7) {
+            const squareP = Math.min(1, progress / 0.5);
+            drawGrid(ctx, 1 - Math.max(0, (progress - 0.65) * 10)); // Fade grid out later
 
             // Determine active row for "Sliding Focus"
-            const rowPhaseDuration = 0.1; // 0.4 total / 4 rows
+            const rowPhaseDuration = 0.125; // 0.5 total / 4 rows
 
             square.forEach((row, ri) => {
                 const rowStart = ri * rowPhaseDuration;
@@ -98,13 +98,13 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                 const isHighlight = isCurrentRow || (ri === 0 && squareP < 0.1);
 
                 // Fade out entire square at the end of animation
-                if (progress > 0.55) {
-                    rowOpacity *= (1 - (progress - 0.55) * 5);
+                if (progress > 0.65) {
+                    rowOpacity *= (1 - (progress - 0.65) * 5);
                 }
 
                 if (rowOpacity > 0) {
                     // Row Background Highlight
-                    if (isHighlight && progress < 0.4) {
+                    if (isHighlight && progress < 0.5) {
                         ctx.save();
                         ctx.fillStyle = highlightColor;
                         ctx.globalAlpha = 0.1;
@@ -165,11 +165,11 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
             });
         }
 
-        // --- STAGE 2: PROOF LINES (0.40 - 0.60) ---
-        if (progress > 0.4 && progress < 0.65) {
-            const proofP = (progress - 0.4) / 0.2;
+        // --- STAGE 2: PROOF LINES (0.50 - 0.70) ---
+        if (progress > 0.5 && progress < 0.75) {
+            const proofP = (progress - 0.5) / 0.2;
             ctx.save();
-            ctx.globalAlpha = 1 - Math.max(0, (progress - 0.6) * 10);
+            ctx.globalAlpha = 1 - Math.max(0, (progress - 0.7) * 10);
             ctx.strokeStyle = highlightColor;
             ctx.lineWidth = 2;
 
@@ -200,9 +200,9 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
             ctx.restore();
         }
 
-        // --- STAGE 3: IMAGE & MESSAGE (0.60 - 1.0) ---
-        if (progress > 0.55) {
-            const finalP = Math.min(1, (progress - 0.55) / 0.20);
+        // --- STAGE 3: IMAGE & MESSAGE (0.70 - 1.0) ---
+        if (progress > 0.65) {
+            const finalP = Math.min(1, (progress - 0.65) / 0.15);
 
             if (imgRef.current && imgRef.current.complete) {
                 ctx.save();
@@ -383,8 +383,9 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const handleGenerateGif = async () => {
         setIsGenerating(true);
         try {
-            // Delay adjusted to 30ms for a smoother, slightly faster but longer-duration GIF (18s total)
-            const blob = await createAnimatedGif(renderFrame, size, size, totalFrames, 30);
+            // Slower GIF speed: 60ms delay (16.6 fps) for a more calm and peaceful feeling.
+            // Total GIF duration: 600 frames * 60ms = 36 seconds of magic!
+            const blob = await createAnimatedGif(renderFrame, size, size, totalFrames, 60);
             setGifBlob(blob);
             setGifUrl(URL.createObjectURL(blob));
             setIsFinished(true);
