@@ -420,9 +420,16 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
 
         const animate = () => {
             renderFrame(ctx, frame, totalFrames);
-            if (frame < totalFrames) {
-                frame++;
+
+            // Loop automatically like a GIF
+            frame = (frame + 1) % totalFrames;
+
+            // Reset particles on loop restart for a clean experience
+            if (frame === 0) {
+                confettiRef.current = [];
+                crackersRef.current = [];
             }
+
             animationId = requestAnimationFrame(animate);
         };
 
