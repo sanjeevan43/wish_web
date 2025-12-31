@@ -12,8 +12,8 @@ const LandingPage = ({ onCreateWish }) => {
                 </div>
 
                 <h1 className="landing-title mb-md">
-                    Some dates don't fade.<br />
-                    They return.
+                    Some days are special.<br />
+                    Some memories come only once.
                 </h1>
 
                 <p className="landing-subtitle mb-xl">
