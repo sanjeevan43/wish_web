@@ -8,28 +8,33 @@
 }
 
 :root {
-  /* Color Palette - Vibrant, Multi-Color & Premium */
-  --primary-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 30%, #a855f7 70%, #ff0080 100%);
-  --secondary-gradient: linear-gradient(135deg, #FFEA00 0%, #FF3D00 50%, #D500F9 100%);
-  --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 50%, #5eead4 100%);
+  /* Color Palette - Clean, Elegant White & Gold/Rose */
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --success-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
   --warm-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  --royal-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --vibrant-rainbow: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8f00ff);
+  --royal-gradient: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  --vibrant-rainbow: linear-gradient(90deg, #ff0000, #ff0080, #ff4d00, #ff9a00, #ffcf00, #d500f9, #ff0055);
 
-  --bg-primary: #05071a;
-  --bg-secondary: #0c0f2b;
-  --bg-card: rgba(255, 255, 255, 0.08);
-  --bg-card-hover: rgba(255, 255, 255, 0.12);
+  /* Light Theme Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-hover: rgba(255, 255, 255, 0.9);
 
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.8);
-  --text-muted: rgba(255, 255, 255, 0.6);
+  /* Light Theme Text */
+  --text-primary: #1e293b;
+  /* Dark Slate for readability */
+  --text-secondary: #475569;
+  /* Slate Gray */
+  --text-muted: #94a3b8;
 
-  --accent-purple: #a855f7;
-  --accent-pink: #ec4899;
-  --accent-cyan: #06b6d4;
-  --accent-gold: #fbbf24;
-  --accent-orange: #f59e0b;
+  /* Accents */
+  --accent-purple: #7c3aed;
+  --accent-pink: #db2777;
+  --accent-cyan: #0891b2;
+  --accent-gold: #d97706;
+  --accent-orange: #ea580c;
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -46,11 +51,11 @@
   --radius-xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
+  /* Shadows (Darker for Light Theme) */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 40px rgba(100, 100, 255, 0.2);
 
   /* Transitions */
   --transition-fast: 0.2s ease;
@@ -67,7 +72,7 @@ body {
   min-height: 100vh;
 }
 
-/* Animated Multi-Color Background */
+/* Animated Multi-Color Background - Subtle Pastels */
 body::before {
   content: '';
   position: fixed;
@@ -76,11 +81,11 @@ body::before {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(circle at 10% 20%, rgba(255, 0, 128, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(0, 242, 254, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 50% 10%, rgba(168, 85, 247, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(251, 191, 36, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.12) 0%, transparent 40%);
+    radial-gradient(circle at 10% 20%, rgba(200, 220, 255, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 220, 220, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 50% 10%, rgba(240, 240, 255, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(255, 245, 200, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(220, 255, 220, 0.3) 0%, transparent 40%);
   background-attachment: fixed;
   animation: backgroundPulse 20s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   pointer-events: none;
@@ -137,6 +142,11 @@ h2 {
 
 h3 {
   font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+p {
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-secondary);
 }
 
 p {

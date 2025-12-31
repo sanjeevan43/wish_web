@@ -8,8 +8,8 @@ const WishForm = ({ onSubmit, onBack, initialData }) => {
         senderName: initialData?.senderName || '',
         date: initialData?.date || '',
         message: initialData?.message || '',
-        colorHighlight: initialData?.colorHighlight || '#4facfe',
-        colorBg: initialData?.colorBg || '#0f172a'
+        colorHighlight: initialData?.colorHighlight || '#667eea',
+        colorBg: initialData?.colorBg || '#ffffff'
     });
 
     const [errors, setErrors] = useState({});
@@ -17,18 +17,18 @@ const WishForm = ({ onSubmit, onBack, initialData }) => {
     const occasions = [
         { value: 'birthday', label: '🎂 Birthday', emoji: '🎂' },
         { value: 'anniversary', label: '💑 Anniversary', emoji: '💑' },
-        { value: 'newyear', label: '🎊 New Year', emoji: '🎊' },
-        { value: 'wedding', label: '💒 Wedding', emoji: '💒' },
-        { value: 'graduation', label: '🎓 Graduation', emoji: '🎓' },
+        { value: 'love', label: '❤️ Love', emoji: '❤️' },
+        { value: 'wedding', label: '💍 Wedding', emoji: '💍' },
+        { value: 'gratitude', label: '🙏 Thank You', emoji: '🙏' },
         { value: 'other', label: '✨ Other', emoji: '✨' }
     ];
 
     const colorPresets = [
-        { name: 'Magical Cyan', highlight: '#00f2fe', bg: '#05071a' },
-        { name: 'Neon Pink', highlight: '#ff0080', bg: '#0f051d' },
-        { name: 'Royal Purple', highlight: '#a855f7', bg: '#1a0533' },
-        { name: 'Golden Sun', highlight: '#fee140', bg: '#1a0a0a' },
-        { name: 'Emerald', highlight: '#22c55e', bg: '#061a12' }
+        { name: 'Pure Elegance', highlight: '#667eea', bg: '#ffffff' },
+        { name: 'Classic Gold', highlight: '#d97706', bg: '#f8fafc' },
+        { name: 'Warm Rose', highlight: '#db2777', bg: '#fff0f5' },
+        { name: 'Mint Fresh', highlight: '#059669', bg: '#f0fdf4' },
+        { name: 'Royal White', highlight: '#7c3aed', bg: '#faf5ff' }
     ];
 
     const handleChange = (e) => {

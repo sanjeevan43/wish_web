@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './MagicSquareAnimation.css';
 import { parseDateComponents, generateDateEchoSquare } from '../utils/magicSquare';
 import { createAnimatedGif } from '../utils/gifGenerator';
+import TinyColor from 'tinycolor2';
 
 const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink, isSharedView }) => {
     const canvasRef = useRef(null);
@@ -36,8 +37,8 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const startX = padding;
     const startY = padding;
 
-    const highlightColor = wishData.colorHighlight || '#ff6b6b';
-    const bgColor = wishData.colorBg || '#0a0a0f';
+    const highlightColor = wishData.colorHighlight || '#667eea';
+    const bgColor = wishData.colorBg || '#ffffff';
 
     // Total duration: ~10 seconds on screen (at 60fps), much longer in GIF
     const totalFrames = 600;
@@ -135,9 +136,14 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                             const hueShift = (progress * 360 + ri * 20 + ci * 20) % 360;
                             const isDateRow = (ri === 0);
 
-                            ctx.fillStyle = isDateRow ? `hsl(${hueShift}, 100%, 70%)` : '#fff';
+                            // For light themes (white/bright bg), use dark text for non-highlighted numbers
+                            const isLtTheme = TinyColor(bgColor).isLight();
+                            const baseTextColor = isLtTheme ? '#1e293b' : '#fff';
+                            const dimTextColor = isLtTheme ? 'rgba(30, 41, 59, 0.7)' : 'rgba(255,255,255,0.7)';
+
+                            ctx.fillStyle = isDateRow ? `hsl(${hueShift}, 100%, 70%)` : baseTextColor;
                             // Dynamic dimming
-                            if (isCompletedRow && ri !== 0) ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                            if (isCompletedRow && ri !== 0) ctx.fillStyle = dimTextColor;
                             if (isCompletedRow && ri === 0) ctx.fillStyle = `hsl(${hueShift}, 100%, 75%)`;
 
                             // Fade out
@@ -238,6 +244,12 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
             ctx.save();
             ctx.globalAlpha = Math.min(1, finalP * 1.5);
             ctx.translate(0, (1 - finalP) * 30);
+
+            // Text color calculation for message (must contrast with image overlay if any, or flat bg)
+            // If we have an image, we usually darken it, so white text is good.
+            // BUT if no image or light theme preference...
+            // For now, let's stick to white if image is present (due to overlay), but adaptive if flat.
+            // Actually, line 234 adds a dark gradient overlay [rgba(0,0,0,0.8)], so WHITE text is always correct there.
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.font = `bold ${size * 0.09}px 'Dancing Script', cursive`;
