@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './MagicSquareAnimation.css';
 import { parseDateComponents, generateDateEchoSquare } from '../utils/magicSquare';
 import { createAnimatedGif } from '../utils/gifGenerator';
 import TinyColor from 'tinycolor2';
 
-const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink, isSharedView }) => {
+const MagicSquareAnimation = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const wishData = location.state?.wishData;
+    const isSharedView = location.pathname.startsWith('/share/');
+
     const canvasRef = useRef(null);
     const [gifUrl, setGifUrl] = useState(null);
     const [isGenerating, setIsGenerating] = useState(false);
@@ -13,20 +19,63 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const [showGift, setShowGift] = useState(true);
     const [isOpening, setIsOpening] = useState(false);
     const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+    const [shareableLink, setShareableLink] = useState('');
     const confettiRef = useRef([]); // To store confetti particles
     const auraRef = useRef([]); // To store aura particles
     const crackersRef = useRef([]); // To store firework/crackers particles during square reveal
 
+    // Redirect if no wish data
+    useEffect(() => {
+        if (!wishData && !isSharedView) {
+            navigate('/create');
+        }
+    }, [wishData, navigate, isSharedView]);
+
+    // Generate shareable link
+    useEffect(() => {
+        if (wishData) {
+            const encoded = encodeWishData(wishData);
+            const link = `${window.location.origin}/share/${encoded}`;
+            setShareableLink(link);
+        }
+    }, [wishData]);
+
+    // Utility to encode wish data
+    function encodeWishData(data) {
+        const json = JSON.stringify(data);
+        return btoa(encodeURIComponent(json));
+    }
+
+    const handleBack = () => {
+        navigate('/create', { state: { wishData } });
+    };
+
+    const handleCreateAnother = () => {
+        navigate('/create');
+    };
+
+    if (!wishData && !isSharedView) {
+        return null;
+    }
+
     // Initialize AI Image
     useEffect(() => {
-        import('../utils/imageGenerator').then(async (mod) => {
-            const imgUrl = await mod.generateCelebrationImage(wishData);
-            setBgImage(imgUrl);
-        });
+        if (wishData) {
+            import('../utils/imageGenerator').then(async (mod) => {
+                try {
+                    const imgUrl = await mod.generateCelebrationImage(wishData);
+                    setBgImage(imgUrl);
+                } catch (error) {
+                    console.log('Image generation not available:', error);
+                }
+            }).catch(() => {
+                console.log('Image generator module not found');
+            });
+        }
     }, [wishData]);
 
     // Calculate Square using Date Echo Logic
-    const dateStr = wishData.date || '30/03/2007';
+    const dateStr = wishData?.date || '30/03/2007';
     const { DD, MM, CC, YY } = parseDateComponents(dateStr);
     const { square, magicConstant } = generateDateEchoSquare(DD, MM, CC, YY);
 
@@ -37,8 +86,8 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const startX = padding;
     const startY = padding;
 
-    const highlightColor = wishData.colorHighlight || '#667eea';
-    const bgColor = wishData.colorBg || '#ffffff';
+    const highlightColor = wishData?.colorHighlight || '#667eea';
+    const bgColor = wishData?.colorBg || '#ffffff';
 
     // Total duration: ~10 seconds on screen (at 60fps), much longer in GIF
     const totalFrames = 600;
@@ -253,19 +302,19 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
             ctx.fillStyle = '#fff';
             ctx.textAlign = 'center';
             ctx.font = `bold ${size * 0.09}px 'Dancing Script', cursive`;
-            ctx.fillText(`Happy ${wishData.occasion.charAt(0).toUpperCase() + wishData.occasion.slice(1)}!`, size / 2, size * 0.55);
+            ctx.fillText(`Happy ${wishData?.occasion?.charAt(0).toUpperCase() + wishData?.occasion?.slice(1) || 'Celebration'}!`, size / 2, size * 0.55);
 
             ctx.font = `italic ${size * 0.04}px 'Playfair Display', serif`;
-            const lines = wishData.message.split('\n');
+            const lines = (wishData?.message || 'A special wish for you').split('\n');
             lines.forEach((line, i) => {
                 ctx.fillText(line, size / 2, size * 0.65 + i * 50);
             });
 
             ctx.fillStyle = highlightColor;
             ctx.font = `bold ${size * 0.03}px 'Poppins', sans-serif`;
-            ctx.fillText(`To: ${wishData.recipientName}`, size / 2, size * 0.82);
+            ctx.fillText(`To: ${wishData?.recipientName || 'Someone Special'}`, size / 2, size * 0.82);
 
-            if (wishData.senderName) {
+            if (wishData?.senderName) {
                 ctx.font = `italic ${size * 0.025}px 'Poppins', sans-serif`;
                 ctx.fillText(`By: ${wishData.senderName}`, size / 2, size * 0.88);
             }
@@ -273,7 +322,7 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
 
             // Floating Emoji Particles
             ctx.save();
-            const seed = wishData.recipientName.length + wishData.date.length;
+            const seed = (wishData?.recipientName?.length || 5) + (wishData?.date?.length || 10);
             const particleCount = 15;
             for (let i = 0; i < particleCount; i++) {
                 const pSeed = seed + i;
@@ -287,9 +336,9 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
 
                 ctx.globalAlpha = opacity;
                 ctx.font = `${size * 0.04}px serif`;
-                const emojis = wishData.occasion === 'birthday' ? ['🎂', '🎈', '✨', '🎁'] :
-                    wishData.occasion === 'anniversary' ? ['❤️', '💕', '🌹', '✨'] :
-                        wishData.occasion === 'wedding' ? ['💍', '🥂', '🌸', '✨'] :
+                const emojis = (wishData?.occasion === 'birthday') ? ['🎂', '🎈', '✨', '🎁'] :
+                    (wishData?.occasion === 'anniversary') ? ['❤️', '💕', '🌹', '✨'] :
+                        (wishData?.occasion === 'wedding') ? ['💍', '🥂', '🌸', '✨'] :
                             ['✨', '💖', '⭐', '🎈'];
                 const emoji = emojis[pSeed % emojis.length];
                 ctx.fillText(emoji, x, y);
@@ -472,17 +521,41 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const handleGenerateGif = async () => {
         setIsGenerating(true);
         try {
-            // Slower GIF speed: 60ms delay (16.6 fps) for a more calm and peaceful feeling.
-            // Total GIF duration: 600 frames * 60ms = 36 seconds of magic!
-            const blob = await createAnimatedGif(renderFrame, size, size, totalFrames, 60);
+            // Optimized GIF: 120 frames at 50ms = 6 seconds, faster generation
+            const gifFrames = 120;
+            const blob = await createAnimatedGif(renderFrame, size, size, gifFrames, 50);
             setGifBlob(blob);
             setGifUrl(URL.createObjectURL(blob));
             setIsFinished(true);
         } catch (e) {
-            console.error(e);
+            console.error('GIF generation error:', e);
             alert("Could not generate GIF. Please try again or use a simpler wish.");
         }
         finally { setIsGenerating(false); }
+    };
+
+    // Robust download function
+    const handleDownloadGif = () => {
+        if (!gifBlob) return;
+
+        try {
+            const url = URL.createObjectURL(gifBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `magic_wish_${wishData?.recipientName || 'special'}.gif`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Cleanup the URL after a short delay
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        } catch (e) {
+            console.error('Download error:', e);
+            // Fallback: open in new tab
+            if (gifUrl) {
+                window.open(gifUrl, '_blank');
+            }
+        }
     };
 
     // Native Share API (mobile friendly)
@@ -597,49 +670,24 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                     {showGift && (
                         <div className={`gift-overlay ${isOpening ? 'opening' : ''}`} onClick={handleOpenGift}>
                             <div className="gift-content">
-                                <div className="gift-box">
-                                    <div className="gift-lid"></div>
-                                    <div className="gift-body"></div>
-                                    <div className="gift-ribbon"></div>
-                                </div>
-                                <h2 className="gift-text">A Magical Surprise for You! ✨</h2>
-                                <p className="gift-hint">Tap the gift to open</p>
+                                <div className="gift-box"></div>
+                                <h2 className="gift-text">Your Magic Wish Awaits</h2>
+                                <p className="gift-hint">Click to reveal</p>
                             </div>
                         </div>
                     )}
                 </div>
 
                 <div className="animation-actions text-center mt-lg">
-                    {/* --- SHARE LINK SECTION (Always Visible for Sender) --- */}
-                    {!isSharedView && (
-                        <div className="share-section fast-share fade-in mb-xl">
-                            <p className="share-label text-gradient">✨ Your Magic Link is Ready!</p>
-                            <div className="share-link-box">
-                                <a
-                                    href={shareableLink || window.location.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="share-link-display"
-                                >
-                                    {shareableLink || window.location.href}
-                                </a>
-                            </div>
-                            <div className="share-link-actions">
-                                <button className="share-link-btn" onClick={handleCopyLink}>
-                                    {linkCopied ? '✓ Copied!' : '📋 Copy Link'}
-                                </button>
-                                <button className="share-link-btn share-whatsapp-btn" onClick={handleWhatsAppShare}>
-                                    WhatsApp 📲
-                                </button>
-                            </div>
-                        </div>
-                    )}
 
                     {/* --- MAIN ACTION ROW (GIF Generation) --- */}
                     {!isSharedView && !isFinished && (
                         <div className="action-row mb-lg">
-                            <button className="btn btn-secondary mr-md" onClick={onBack}>
+                            <button className="btn btn-secondary mr-md" onClick={handleBack}>
                                 Edit Wish ✏️
+                            </button>
+                            <button className="btn btn-secondary mr-md" onClick={handleCopyLink}>
+                                {linkCopied ? '✓ Copied!' : '🔗 Copy Link'}
                             </button>
                             <button className="btn btn-primary glow-on-hover" onClick={handleGenerateGif} disabled={isGenerating}>
                                 {isGenerating ? '🎨 Weaving High-Quality GIF...' : 'Download as GIF 🎁'}
@@ -653,9 +701,9 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                             <div className="gif-preview-box mb-md">
                                 <img src={gifUrl} alt="Magic Gift" className="gif-preview" />
                             </div>
-                            <a href={gifUrl} download={`magic_wish_${wishData.recipientName}.gif`} className="btn btn-primary mb-md">
+                            <button onClick={handleDownloadGif} className="btn btn-primary mb-md">
                                 Download GIF Now 📥
-                            </a>
+                            </button>
                         </div>
                     )}
 
@@ -663,25 +711,13 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                     {isSharedView && (
                         <div className="shared-view-actions fade-in mt-xl">
                             <h3 className="text-secondary mb-md">Loved this magic wish?</h3>
-                            <button className="btn btn-primary btn-large shadow-glow" onClick={onCreateAnother}>
+                            <button className="btn btn-primary btn-large shadow-glow" onClick={handleCreateAnother}>
                                 Create Your Own Magic Wish ✨
                             </button>
                         </div>
                     )}
 
-                    {/* --- SECONDARY SHARE BUTTONS (Always Visible) --- */}
-                    {!isSharedView && (
-                        <div className="social-share-row mt-md">
-                            <p className="share-or mb-sm">Or share via social:</p>
-                            <div className="share-buttons">
-                                {navigator.share && (
-                                    <button className="share-btn share-native" onClick={handleNativeShare}>Share File</button>
-                                )}
-                                <button className="share-btn share-twitter" onClick={handleTwitterShare}>Twitter</button>
-                                <button className="share-btn share-facebook" onClick={handleFacebookShare}>Facebook</button>
-                            </div>
-                        </div>
-                    )}
+
                 </div>
             </div>
         </div>

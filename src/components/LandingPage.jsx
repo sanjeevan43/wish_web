@@ -1,7 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 
-const LandingPage = ({ onCreateWish }) => {
+const LandingPage = () => {
+    const navigate = useNavigate();
+
+    const handleCreateWish = () => {
+        navigate('/create');
+    };
+
     return (
         <div className="landing-page page">
             <div className="particles" id="particles-container"></div>
@@ -23,7 +30,7 @@ const LandingPage = ({ onCreateWish }) => {
 
                 <button
                     className="btn btn-primary btn-large"
-                    onClick={onCreateWish}
+                    onClick={handleCreateWish}
                 >
                     <span>✨</span>
                     Begin the Memory

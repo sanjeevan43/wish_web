@@ -14,6 +14,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(10px);
 }
 
 .canvas-wrapper {
@@ -25,12 +28,11 @@
     max-width: 100%;
     width: min(800px, 100%);
     background: #000;
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 3px solid rgba(102, 126, 234, 0.3);
     border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(102, 126, 234, 0.2);
     aspect-ratio: 1;
-    /* Maintain square shape */
 }
 
 canvas {
@@ -55,12 +57,13 @@ canvas {
 }
 
 .gif-preview-box {
-    background: #000;
+    background: rgba(255, 255, 255, 0.95);
     padding: var(--spacing-md);
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     display: inline-block;
     max-width: 100%;
+    box-shadow: var(--shadow-lg);
 }
 
 .gif-preview {
@@ -80,6 +83,7 @@ canvas {
     }
 }
 
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .animation-container {
         padding: var(--spacing-md);
@@ -89,6 +93,17 @@ canvas {
         border-radius: var(--radius-lg);
         margin: var(--spacing-md) 0;
         width: 100%;
+    }
+
+    /* Mobile text improvements */
+    h2, h3 {
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+
+    .share-label {
+        font-size: 1.1rem;
+        font-weight: 700;
     }
 }
 
@@ -107,9 +122,11 @@ canvas {
 }
 
 .share-label {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
     margin-bottom: var(--spacing-md);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .share-buttons {
@@ -188,10 +205,12 @@ canvas {
 
 /* Copy Success */
 .copy-success {
-    color: #4ade80;
-    font-size: 0.85rem;
+    color: #059669;
+    font-size: 0.9rem;
+    font-weight: 600;
     margin-top: var(--spacing-sm);
     animation: fadeIn 0.3s ease-out;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 /* Share Link Box - Smaller & Elegant */
@@ -202,16 +221,18 @@ canvas {
     margin: var(--spacing-sm) auto;
     border-radius: var(--radius-md);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.9);
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .share-link-display {
     flex: 1;
-    padding: 12px;
-    color: var(--accent-cyan);
-    font-size: 0.75rem;
+    padding: 15px;
+    color: var(--text-primary);
+    background: rgba(248, 250, 252, 0.95);
+    font-size: 0.8rem;
     font-family: 'Monaco', 'Consolas', monospace;
     text-decoration: none;
     word-break: break-all;
@@ -220,6 +241,9 @@ canvas {
     display: block;
     text-align: center;
     line-height: 1.4;
+    font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-sm);
 }
 
 .share-link-actions {
@@ -231,23 +255,26 @@ canvas {
 
 .share-link-btn {
     padding: 8px 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius-md);
-    color: white;
+    color: var(--text-primary);
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    box-shadow: var(--shadow-sm);
 }
 
 .share-link-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--accent-purple);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .share-whatsapp-btn {
@@ -323,11 +350,12 @@ canvas {
 }
 
 .shared-view-actions {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.9);
     padding: var(--spacing-xl);
     border-radius: var(--radius-xl);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
 }
 
 .shadow-glow {
@@ -384,113 +412,72 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--bg-primary);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 100;
     cursor: pointer;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.3s ease;
     border-radius: var(--radius-xl);
 }
 
 .gift-overlay.opening {
     opacity: 0;
-    transform: scale(1.5);
     pointer-events: none;
 }
 
 .gift-content {
     text-align: center;
-    animation: bounce 2s ease-in-out infinite;
+    padding: var(--spacing-xl);
 }
 
 .gift-box {
-    position: relative;
-    width: 120px;
-    height: 100px;
-    background: #ff4757;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
     margin: 0 auto 30px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4);
+    border-radius: var(--radius-lg);
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    backdrop-filter: blur(10px);
 }
 
-.gift-lid {
-    position: absolute;
-    top: -20px;
-    left: -5px;
-    width: 130px;
-    height: 25px;
-    background: #ff6b81;
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 2;
-}
-
-.gift-ribbon {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 25px;
-    height: 120px;
-    background: #f1c40f;
-    z-index: 1;
-}
-
-.gift-ribbon::after {
-    content: '';
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 30px;
-    border: 6px solid #f1c40f;
-    border-radius: 50% 50% 0 0;
+.gift-box::before {
+    content: '🎁';
 }
 
 .gift-text {
     font-family: 'Playfair Display', serif;
-    background: linear-gradient(to right, #fff, #f1c40f);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 1.8rem !important;
-    margin-bottom: 10px !important;
-    color: white;
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .gift-hint {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    animation: pulse 1.5s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
+/* Remove unnecessary animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 0.5;
-    }
-
-    50% {
+    to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -499,6 +486,8 @@ canvas {
     .gift-text {
         font-size: 1.4rem !important;
         padding: 0 20px;
+        font-weight: 800 !important;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
     }
 
     .gift-box {
@@ -516,5 +505,37 @@ canvas {
 
     .animation-container {
         padding: var(--spacing-sm);
+    }
+
+    /* Mobile text visibility */
+    .gift-hint {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .gift-text {
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    .gift-box {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .share-link-display {
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 18px;
+    }
+
+    .share-link-btn {
+        font-weight: 700;
+    }
+
+    .copy-success {
+        font-size: 1rem;
+        font-weight: 700;
     }
 }

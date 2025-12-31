@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './WishForm.css';
 
-const WishForm = ({ onSubmit, onBack, initialData }) => {
+const WishForm = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const initialData = location.state?.wishData || null;
+
     const [formData, setFormData] = useState({
         occasion: initialData?.occasion || 'birthday',
         recipientName: initialData?.recipientName || '',
@@ -80,8 +85,12 @@ const WishForm = ({ onSubmit, onBack, initialData }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            onSubmit(formData);
+            navigate('/animate', { state: { wishData: formData } });
         }
+    };
+
+    const handleBack = () => {
+        navigate('/');
     };
 
     const handleDateInputChange = (e) => {
@@ -111,7 +120,7 @@ const WishForm = ({ onSubmit, onBack, initialData }) => {
     return (
         <div className="wish-form-page page">
             <div className="wish-form-container fade-in">
-                <button className="back-button" onClick={onBack}>
+                <button className="back-button" onClick={handleBack}>
                     ← Back
                 </button>
 

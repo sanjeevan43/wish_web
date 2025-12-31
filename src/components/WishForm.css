@@ -7,28 +7,34 @@
     width: 100%;
     margin: 0 auto;
     padding: var(--spacing-xl);
-    background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius-xl);
     backdrop-filter: blur(20px);
     box-shadow: var(--shadow-lg);
 }
 
 .back-button {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    padding: var(--spacing-xs) 0;
+    padding: var(--spacing-sm) var(--spacing-md);
     margin-bottom: var(--spacing-lg);
     transition: all var(--transition-fast);
     font-family: 'Inter', sans-serif;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .back-button:hover {
-    color: var(--text-primary);
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--accent-purple);
+    color: var(--accent-purple);
     transform: translateX(-4px);
+    box-shadow: var(--shadow-md);
 }
 
 .form-header h2 {
@@ -52,8 +58,8 @@
 
 .occasion-btn {
     padding: var(--spacing-md);
-    background: var(--bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-normal);
@@ -62,18 +68,25 @@
     align-items: center;
     gap: var(--spacing-xs);
     font-family: 'Inter', sans-serif;
+    box-shadow: var(--shadow-sm);
 }
 
 .occasion-btn:hover {
-    background: var(--bg-card-hover);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(102, 126, 234, 0.3);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .occasion-btn.active {
     background: var(--primary-gradient);
     border-color: var(--accent-purple);
+    color: white;
     box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+.occasion-btn.active .occasion-label {
+    color: white;
 }
 
 .occasion-emoji {
@@ -82,29 +95,35 @@
 
 .occasion-label {
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-primary);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 /* Form Elements */
 input.error,
 textarea.error {
-    border-color: #f5576c;
-    box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.2);
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+    background: rgba(254, 242, 242, 0.9);
 }
 
 .error-message {
     display: block;
-    color: #f5576c;
+    color: #dc2626;
     font-size: 0.875rem;
+    font-weight: 600;
     margin-top: var(--spacing-xs);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .helper-text {
     display: block;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     font-size: 0.875rem;
+    font-weight: 500;
     margin-top: var(--spacing-xs);
+    opacity: 0.9;
 }
 
 .message-meta {
@@ -116,7 +135,9 @@ textarea.error {
 
 .char-count {
     font-size: 0.875rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
+    font-weight: 500;
+    opacity: 0.9;
 }
 
 .btn-full {
@@ -124,7 +145,7 @@ textarea.error {
     margin-top: var(--spacing-md);
 }
 
-/* Responsive */
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .wish-form-container {
         padding: var(--spacing-lg);
@@ -144,7 +165,23 @@ textarea.error {
     }
 
     .occasion-label {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    /* Mobile text improvements */
+    label {
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .helper-text {
+        font-weight: 600;
+        opacity: 0.9;
+    }
+
+    .char-count {
+        font-weight: 600;
     }
 }
 
@@ -160,6 +197,34 @@ textarea.error {
     .row-flex {
         flex-direction: column;
         gap: var(--spacing-sm);
+    }
+
+    /* Mobile text visibility */
+    .form-header h2 {
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+
+    .form-header p {
+        font-weight: 600;
+        color: var(--text-primary);
+        opacity: 0.9;
+    }
+
+    label {
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .occasion-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .helper-text,
+    .char-count,
+    .error-message {
+        font-weight: 700;
     }
 }
 
@@ -180,11 +245,17 @@ textarea.error {
     width: 100%;
     height: 50px;
     padding: 0;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: var(--radius-md);
     background: transparent;
     cursor: pointer;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.color-picker:focus {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2), var(--shadow-md);
 }
 
 .color-picker::-webkit-color-swatch-wrapper {

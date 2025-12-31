@@ -25,6 +25,7 @@ export async function createAnimatedGif(renderFrame, width, height, totalFrames,
             quality: 10,
             width,
             height,
+            workerScript: '/gif.worker.js'
         });
 
         // Render and capture each frame
