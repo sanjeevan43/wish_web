@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import './WishForm.css';
 
-const WishForm = ({ onSubmit, onBack }) => {
+const WishForm = ({ onSubmit, onBack, initialData }) => {
     const [formData, setFormData] = useState({
-        occasion: 'birthday',
-        recipientName: '',
-        date: '',
-        message: '',
-        colorHighlight: '#4facfe',
-        colorBg: '#0f172a'
+        occasion: initialData?.occasion || 'birthday',
+        recipientName: initialData?.recipientName || '',
+        senderName: initialData?.senderName || '',
+        date: initialData?.date || '',
+        message: initialData?.message || '',
+        colorHighlight: initialData?.colorHighlight || '#4facfe',
+        colorBg: initialData?.colorBg || '#0f172a'
     });
 
     const [errors, setErrors] = useState({});
@@ -50,6 +51,10 @@ const WishForm = ({ onSubmit, onBack }) => {
 
         if (!formData.recipientName.trim()) {
             newErrors.recipientName = 'Please enter recipient name';
+        }
+
+        if (!formData.senderName.trim()) {
+            newErrors.senderName = 'Please enter your name';
         }
 
         if (!formData.date) {
@@ -145,11 +150,28 @@ const WishForm = ({ onSubmit, onBack }) => {
                             name="recipientName"
                             value={formData.recipientName}
                             onChange={handleChange}
-                            placeholder="e.g., Kirthi"
+                            placeholder="e.g., Sanjeev"
                             className={errors.recipientName ? 'error' : ''}
                         />
                         {errors.recipientName && (
                             <span className="error-message">{errors.recipientName}</span>
+                        )}
+                    </div>
+
+                    {/* Sender Name */}
+                    <div className="form-group">
+                        <label htmlFor="senderName">✍️ Your Name</label>
+                        <input
+                            type="text"
+                            id="senderName"
+                            name="senderName"
+                            value={formData.senderName}
+                            onChange={handleChange}
+                            placeholder="e.g., Sanjeev"
+                            className={errors.senderName ? 'error' : ''}
+                        />
+                        {errors.senderName && (
+                            <span className="error-message">{errors.senderName}</span>
                         )}
                     </div>
 

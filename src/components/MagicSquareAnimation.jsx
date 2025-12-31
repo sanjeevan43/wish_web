@@ -251,7 +251,12 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
 
             ctx.fillStyle = highlightColor;
             ctx.font = `bold ${size * 0.03}px 'Poppins', sans-serif`;
-            ctx.fillText(`For ${wishData.recipientName}`, size / 2, size * 0.85);
+            ctx.fillText(`To: ${wishData.recipientName}`, size / 2, size * 0.82);
+
+            if (wishData.senderName) {
+                ctx.font = `italic ${size * 0.025}px 'Poppins', sans-serif`;
+                ctx.fillText(`By: ${wishData.senderName}`, size / 2, size * 0.88);
+            }
             ctx.restore();
 
             // Floating Emoji Particles
@@ -482,8 +487,8 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
                 // User cancelled or error - try text share
                 try {
                     await navigator.share({
-                        title: `Magic Wish for ${wishData.recipientName}`,
-                        text: `I created a special ${wishData.occasion} wish for ${wishData.recipientName} using Ramanujan Magic Square! 🎁✨`
+                        title: `To: ${wishData.recipientName}`,
+                        text: `To: ${wishData.recipientName} ${wishData.senderName ? `By: ${wishData.senderName}` : ''} | Magical ${wishData.occasion} ✨`
                     });
                 } catch (e) {
                     console.log('Share cancelled');
@@ -517,8 +522,8 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const handleWhatsAppShare = () => {
         const link = shareableLink || window.location.href;
         const text = encodeURIComponent(
-            `🎁 I created a magical ${wishData.occasion} wish for ${wishData.recipientName}! ✨\n\n` +
-            `Click to see: ${link}`
+            `🎁 To: ${wishData.recipientName}${wishData.senderName ? ` By: ${wishData.senderName}` : ''} | Magical ${wishData.occasion} ✨\n\n` +
+            `Click: ${link}`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
     };
@@ -527,8 +532,7 @@ const MagicSquareAnimation = ({ wishData, onBack, onCreateAnother, shareableLink
     const handleTwitterShare = () => {
         const link = shareableLink || window.location.href;
         const text = encodeURIComponent(
-            `🎁 Created a magical ${wishData.occasion} wish for ${wishData.recipientName}! ✨\n\n` +
-            `Where math meets heart 💜`
+            `🎁 To: ${wishData.recipientName}${wishData.senderName ? ` By: ${wishData.senderName}` : ''} | Magical ${wishData.occasion} ✨`
         );
         const url = encodeURIComponent(link);
         window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
